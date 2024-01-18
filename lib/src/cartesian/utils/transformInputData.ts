@@ -165,6 +165,8 @@ export const transformInputData = <
       : getDomainFromTicks(yAxis.tickValues);
 
     const yKeysForAxis = yAxis.yKeys ?? yKeys;
+    const hasExplicitDomain = Boolean(domain?.y || yAxis.domain);
+
     const yMin =
       domain?.y?.[0] ??
       tickDomainsY?.[0] ??
@@ -226,7 +228,8 @@ export const transformInputData = <
       outputBounds: yScaleRange,
       // Reverse viewport y values since canvas coordinates increase downward
       viewport: viewport?.y ? [viewport.y[1], viewport.y[0]] : yScaleDomain,
-      isNice: true,
+      // If user provided a domain, don't modify it
+      isNice: hasExplicitDomain ? false : true,
       padEnd:
         typeof domainPadding === "number"
           ? domainPadding
