@@ -1,6 +1,6 @@
 {
   "name": "victory-native-xl-monorepo",
-  "private": false,
+  "private": true,
   "engines": {
     "node": ">=16.14"
   },
@@ -20,7 +20,7 @@
   "scripts": {
     "lint": "eslint --ext .js,.ts,.tsx example lib",
     "typecheck": "tsc --noEmit",
-    "build": "shx cp README.md ./lib/README.md && yarn workspace victory-native build",
+    "build": "shx cp README.md ./lib/README.md && yarn workspace @sunrun/victory-native-xl-fork build",
     "dev:lib": "yarn workspace victory-native dev",
     "dev:example": "yarn workspace example start",
     "dev": "concurrently -n lib,example -c blue,green \"yarn dev:lib\" \"yarn dev:example\"",

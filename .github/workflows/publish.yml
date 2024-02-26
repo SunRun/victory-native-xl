@@ -34,6 +34,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.USER_TOKEN_GITHUB_ACTIONS_PACKAGES }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
+          cd ./lib
           echo "//npm.pkg.github.com/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
           npm config set registry https://npm.pkg.github.com/SunRun
           sudo mkdir ~/.npm || true
