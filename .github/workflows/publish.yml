@@ -36,7 +36,7 @@ jobs:
         run: |
           echo "//npm.pkg.github.com/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
           npm config set registry https://npm.pkg.github.com/SunRun
-          npm config set true
+          npm config set always-auth=true
           sudo mkdir ~/.npm || true
           sudo chown -R $USER:$GROUP ~/.npm || true
           sudo chown -R $USER:$GROUP ~/.config || true
