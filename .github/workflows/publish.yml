@@ -26,6 +26,7 @@ jobs:
       - name: Install dependencies
         run: |
           echo "//npm.pkg.github.com/:_authToken=${{ secrets.NPM_TOKEN }}" > .npmrc
+          echo "always-auth=true" > .npmrc
           yarn install --frozen-lockfile
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
@@ -34,7 +35,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.USER_TOKEN_GITHUB_ACTIONS_PACKAGES }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
-          echo "//npm.pkg.github.com/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
+          echo "//npm.pkg.github.com/:_authToken=${{ secrets.USER_TOKEN_GITHUB_ACTIONS_PACKAGES }}" > ~/.npmrc
+          echo "@sunrun:registry=https://npm.pkg.github.com/sunrun" >> ~/.npmrc
           npm config set registry https://npm.pkg.github.com/SunRun
           sudo mkdir ~/.npm || true
           sudo chown -R $USER:$GROUP ~/.npm || true
