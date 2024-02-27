@@ -39,4 +39,4 @@ jobs:
           sudo mkdir ~/.npm || true
           sudo chown -R $USER:$GROUP ~/.npm || true
           sudo chown -R $USER:$GROUP ~/.config || true
-          npm publish --verbose
+          npm publish --verbose -workspace lib
