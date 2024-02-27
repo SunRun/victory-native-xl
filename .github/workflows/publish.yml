@@ -26,6 +26,7 @@ jobs:
       - name: Install dependencies
         run: |
           echo "//npm.pkg.github.com/:_authToken=${{ secrets.NPM_TOKEN }}" > .npmrc
+          echo "always-auth=true" > .npmrc
           yarn install --frozen-lockfile
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
