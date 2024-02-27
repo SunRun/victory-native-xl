@@ -9,7 +9,7 @@
     "example"
   ],
   "license": "MIT",
-  "react-native": "src/index",
+  "react-native": "lib/src/index",
   "repository": {
     "type": "git",
     "url": "https://github.com/SunRun/victory-native-xl.git"

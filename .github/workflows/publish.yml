@@ -33,11 +33,10 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.USER_TOKEN_GITHUB_ACTIONS_PACKAGES }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-        working-directory: ./lib 
         run: |
           echo "//npm.pkg.github.com/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
           npm config set registry https://npm.pkg.github.com/SunRun
           sudo mkdir ~/.npm || true
           sudo chown -R $USER:$GROUP ~/.npm || true
           sudo chown -R $USER:$GROUP ~/.config || true
-          npm publish --verbose
+          npm publish --verbose lib
