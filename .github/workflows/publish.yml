@@ -34,6 +34,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.USER_TOKEN_GITHUB_ACTIONS_PACKAGES }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
           echo "//npm.pkg.github.com/:_authToken=${{ secrets.USER_TOKEN_GITHUB_ACTIONS_PACKAGES }}" > ~/.npmrc
           echo "@sunrun:registry=https://npm.pkg.github.com/sunrun" >> ~/.npmrc
