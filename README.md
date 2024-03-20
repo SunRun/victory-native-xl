@@ -1,4 +1,3 @@
-
 <div align="center">
   <a href="https://formidable.com/open-source/" target="_blank">
     <img alt="Victory — Formidable, We build the modern web" src="https://raw.githubusercontent.com/FormidableLabs/victory-native-xl/main/victory-hero.png" />
@@ -52,12 +51,11 @@ yarn add victory-native
 
 To get started and read more about the API, view the [docs here](https://formidable.com/open-source/victory-native).
 
-
 ## Syncing the repo with upstream
 
 1. `git fetch upstream`
 1. `git merge upstream/main`
-
+1. When Creating a pull request - make sure that base branch is pointing to `github.com/SunRun/victory-native-xl` `main` branch
 
 ## LICENSE
 
