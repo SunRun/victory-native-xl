@@ -49,6 +49,13 @@ yarn add victory-native
 
 To get started and read more about the API, view the [docs here](https://formidable.com/open-source/victory-native).
 
+
+## Syncing the repo with upstream
+
+1. `git fetch upstream`
+1. `git merge upstream/main`
+
+
 ## LICENSE
 
 MIT

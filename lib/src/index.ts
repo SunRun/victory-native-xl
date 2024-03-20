@@ -78,3 +78,9 @@ export { Pie, type PieSliceData } from "./pie";
 
 export { useSlicePath } from "./pie/hooks/useSlicePath";
 export { useSliceAngularInsetPath } from "./pie/hooks/useSliceAngularInsetPath";
+
+/**
+ * Chart Utils
+ */
+
+export { transformInputData } from "./cartesian/utils/transformInputData";
