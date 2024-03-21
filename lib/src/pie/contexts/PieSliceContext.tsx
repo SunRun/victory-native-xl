@@ -11,7 +11,7 @@ interface PieSliceContext {
 
 const PieSliceContext = createContext<PieSliceContext | undefined>(undefined);
 
-interface PieSliceProviderProps {
+export interface PieSliceProviderProps {
   slice: PieSliceData;
 }
 
