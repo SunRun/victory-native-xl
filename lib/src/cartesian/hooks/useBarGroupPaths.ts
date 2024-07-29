@@ -5,6 +5,7 @@ import {
   createRoundedRectPath,
   type RoundedCorners,
 } from "../../utils/createRoundedRectPath";
+import { useCartesianChartContext } from "../contexts/CartesianChartContext";
 
 export const useBarGroupPaths = (
   points: PointsArray[],
@@ -12,8 +13,12 @@ export const useBarGroupPaths = (
   betweenGroupPadding = 0,
   withinGroupPadding = 0,
   roundedCorners?: RoundedCorners,
+  customBarWidth?: number,
+  barCount?: number,
 ) => {
   const numGroups = points[0]?.length || 0;
+
+  const { yScale } = useCartesianChartContext();
 
   const groupWidth = React.useMemo(() => {
     return (
@@ -23,8 +28,11 @@ export const useBarGroupPaths = (
   }, [betweenGroupPadding, chartBounds.left, chartBounds.right, numGroups]);
 
   const barWidth = React.useMemo(() => {
-    return ((1 - withinGroupPadding) * groupWidth) / Math.max(1, points.length);
-  }, [groupWidth, points.length, withinGroupPadding]);
+    if (customBarWidth) return customBarWidth;
+    const numerator = (1 - withinGroupPadding) * groupWidth;
+    const denominator = barCount ? barCount : Math.max(1, points.length);
+    return numerator / denominator;
+  }, [customBarWidth, groupWidth, points.length, withinGroupPadding, barCount]);
 
   const gapWidth = React.useMemo(() => {
     return (
@@ -36,37 +44,26 @@ export const useBarGroupPaths = (
     return points.map((pointSet, i) => {
       const p = Skia.Path.Make();
       const offset = -groupWidth / 2 + i * (barWidth + gapWidth);
-
-      pointSet.forEach(({ x, y }) => {
+      pointSet.forEach(({ x, y, yValue }) => {
         if (typeof y !== "number") return;
-
-        if (!roundedCorners) {
-          p.addRect(
-            Skia.XYWHRect(x + offset, y, barWidth, chartBounds.bottom - y),
+        const barHeight = yScale(0) - y;
+        if (roundedCorners) {
+          const nonUniformRoundedRect = createRoundedRectPath(
+            x + offset,
+            y,
+            barWidth,
+            barHeight,
+            roundedCorners,
+            Number(yValue),
           );
+          p.addRRect(nonUniformRoundedRect);
         } else {
-          const roundedRectPath = Skia.Path.MakeFromSVGString(
-            createRoundedRectPath(
-              x + offset,
-              y,
-              barWidth,
-              chartBounds.bottom - y,
-              roundedCorners,
-            ),
-          );
-          roundedRectPath && p.addPath(roundedRectPath);
+          p.addRect(Skia.XYWHRect(x + offset, y, barWidth, barHeight));
         }
       });
       return p;
     });
-  }, [
-    barWidth,
-    chartBounds.bottom,
-    gapWidth,
-    groupWidth,
-    points,
-    roundedCorners,
-  ]);
+  }, [barWidth, gapWidth, groupWidth, points, roundedCorners, yScale]);
 
   return { barWidth, groupWidth, gapWidth, paths };
 };

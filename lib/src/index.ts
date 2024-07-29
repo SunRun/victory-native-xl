@@ -54,7 +54,8 @@ export { PolarChart } from "./polar/PolarChart";
 /**
  * Pie chart exports (including useful types)
  */
-export { Pie } from "./pie";
+export { Pie, type PieSliceData } from "./pie";
+
 export { useSlicePath } from "./pie/hooks/useSlicePath";
 export { useSliceAngularInsetPath } from "./pie/hooks/useSliceAngularInsetPath";
 

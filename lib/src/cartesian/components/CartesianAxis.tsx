@@ -15,26 +15,29 @@ import type {
   AxisProps,
   InputFields,
 } from "../../types";
+import { DEFAULT_TICK_COUNT } from "../../utils/tickHelpers";
 
 export const CartesianAxis = <
   RawData extends Record<string, unknown>,
   XK extends keyof InputFields<RawData>,
   YK extends keyof NumericalFields<RawData>,
 >({
-  tickCount,
-  labelPosition,
-  labelOffset,
-  axisSide,
-  lineColor,
-  lineWidth,
-  labelColor,
-  formatYLabel,
-  formatXLabel,
+  tickCount = DEFAULT_TICK_COUNT,
+  xTicksNormalized,
+  yTicksNormalized,
+  labelPosition = "outset",
+  labelOffset = { x: 2, y: 4 },
+  axisSide = { x: "bottom", y: "left" },
+  lineColor = "hsla(0, 0%, 0%, 0.25)",
+  lineWidth = StyleSheet.hairlineWidth,
+  labelColor = "#000000",
+  formatYLabel = (label: ValueOf<InputDatum>) => String(label),
+  formatXLabel = (label: ValueOf<InputDatum>) => String(label),
   yScale,
   xScale,
   font,
   isNumericalData = false,
-  ix,
+  ix = [],
 }: AxisProps<RawData, XK, YK>) => {
   const axisConfiguration = useMemo(() => {
     return {
@@ -112,9 +115,9 @@ export const CartesianAxis = <
   const [x1r = 0, x2r = 0] = xScale.range();
   const fontSize = font?.getSize() ?? 0;
 
-  const yAxisNodes = yScale.ticks(yTicks).map((tick) => {
+  const yAxisNodes = yTicksNormalized.map((tick) => {
     const contentY = formatYLabel(tick as never);
-    const labelWidth = font?.getTextWidth?.(contentY) ?? 0;
+    const labelWidth = font?.measureText?.(contentY).width ?? 0;
     const labelY = yScale(tick) + fontSize / 3;
     const labelX = (() => {
       // left, outset
@@ -160,10 +163,10 @@ export const CartesianAxis = <
     );
   });
 
-  const xAxisNodes = xScale.ticks(xTicks).map((tick) => {
+  const xAxisNodes = xTicksNormalized.map((tick) => {
     const val = isNumericalData ? tick : ix[tick];
     const contentX = formatXLabel(val as never);
-    const labelWidth = font?.getTextWidth?.(contentX) ?? 0;
+    const labelWidth = font?.measureText?.(contentX).width ?? 0;
     const labelX = xScale(tick) - (labelWidth ?? 0) / 2;
     const canFitLabelContent =
       yAxisPosition === "left" ? labelX + labelWidth < x2r : x1r < labelX;
@@ -234,7 +237,7 @@ export const CartesianAxis = <
   );
 };
 
-CartesianAxis.defaultProps = {
+export const CartesianAxisDefaultProps = {
   lineColor: "hsla(0, 0%, 0%, 0.25)",
   lineWidth: StyleSheet.hairlineWidth,
   tickCount: 5,

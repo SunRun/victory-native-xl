@@ -140,7 +140,6 @@ export default function StockPriceScreen(props: { segment: string }) {
           xKey="date"
           yKeys={["high"]}
           chartPressState={[firstTouch, secondTouch]}
-          curve="linear"
           axisOptions={{
             font,
             tickCount: 5,
@@ -282,14 +281,6 @@ const StockArea = ({
     return path;
   });
 
-  const gradColors = useDerivedValue(() => {
-    if (!isWindowActive) return [appColors.tint, `${appColors.tint}33`];
-
-    return isDeltaPositive.value
-      ? [appColors.success[colorPrefix], `${appColors.success[colorPrefix]}33`]
-      : [appColors.error[colorPrefix], `${appColors.error[colorPrefix]}33`];
-  });
-
   const windowLineColor = useDerivedValue(() => {
     return isDeltaPositive.value
       ? appColors.success[colorPrefix]
@@ -330,7 +321,19 @@ const StockArea = ({
             <LinearGradient
               start={vec(0, 0)}
               end={vec(top, bottom)}
-              colors={gradColors}
+              colors={
+                !isWindowActive
+                  ? [appColors.tint, `${appColors.tint}33`]
+                  : isDeltaPositive.value
+                    ? [
+                        appColors.success[colorPrefix],
+                        `${appColors.success[colorPrefix]}33`,
+                      ]
+                    : [
+                        appColors.error[colorPrefix],
+                        `${appColors.error[colorPrefix]}33`,
+                      ]
+              }
             />
           </Path>
           <Path
@@ -377,7 +380,7 @@ const ActiveValueIndicator = ({
     () => "$" + activeValue.value.toFixed(2),
   );
   const activeValueWidth = useDerivedValue(
-    () => font?.getTextWidth(activeValueDisplay.value) || 0,
+    () => font?.measureText(activeValueDisplay.value).width || 0,
   );
   const activeValueX = useDerivedValue(
     () => xPosition.value - activeValueWidth.value / 2,

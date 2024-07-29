@@ -20,10 +20,14 @@ import type {
 import { transformInputData } from "./utils/transformInputData";
 import { findClosestPoint } from "../utils/findClosestPoint";
 import { valueFromSidedNumber } from "../utils/valueFromSidedNumber";
-import { CartesianAxis } from "./components/CartesianAxis";
+import {
+  CartesianAxis,
+  CartesianAxisDefaultProps,
+} from "./components/CartesianAxis";
 import { asNumber } from "../utils/asNumber";
 import type { ChartPressState } from "./hooks/useChartPressState";
 import { useFunctionRef } from "../hooks/useFunctionRef";
+import { CartesianChartProvider } from "./contexts/CartesianChartContext";
 
 type CartesianChartProps<
   RawData extends Record<string, unknown>,
@@ -40,7 +44,7 @@ type CartesianChartProps<
     | ChartPressState<{ x: InputFields<RawData>[XK]; y: Record<YK, number> }>
     | ChartPressState<{ x: InputFields<RawData>[XK]; y: Record<YK, number> }>[];
   children: (args: CartesianChartRenderArg<RawData, YK>) => React.ReactNode;
-  renderOutside: (
+  renderOutside?: (
     args: CartesianChartRenderArg<RawData, YK>,
   ) => React.ReactNode;
   axisOptions?: Partial<Omit<AxisProps<RawData, XK, YK>, "xScale" | "yScale">>;
@@ -59,7 +63,7 @@ export function CartesianChart<
   padding,
   domainPadding,
   children,
-  renderOutside,
+  renderOutside = () => null,
   axisOptions,
   domain,
   chartPressState,
@@ -89,48 +93,69 @@ export function CartesianChart<
     ),
   });
 
-  const { xScale, yScale, chartBounds, isNumericalData, _tData } =
-    React.useMemo(() => {
-      const { xScale, yScale, isNumericalData, ..._tData } = transformInputData(
-        {
-          data,
-          xKey,
-          yKeys,
-          axisOptions: axisOptions
-            ? Object.assign({}, CartesianAxis.defaultProps, axisOptions)
-            : undefined,
-          outputWindow: {
-            xMin: valueFromSidedNumber(padding, "left"),
-            xMax: size.width - valueFromSidedNumber(padding, "right"),
-            yMin: valueFromSidedNumber(padding, "top"),
-            yMax: size.height - valueFromSidedNumber(padding, "bottom"),
-          },
-          domain,
-          domainPadding,
-        },
-      );
-      tData.value = _tData;
-
-      const chartBounds = {
-        left: xScale(xScale.domain().at(0) || 0),
-        right: xScale(xScale.domain().at(-1) || 0),
-        top: yScale(yScale.domain().at(0) || 0),
-        bottom: yScale(yScale.domain().at(-1) || 0),
-      };
-
-      return { tData, xScale, yScale, chartBounds, isNumericalData, _tData };
-    }, [
+  const {
+    xTicksNormalized,
+    yTicksNormalized,
+    xScale,
+    yScale,
+    chartBounds,
+    isNumericalData,
+    _tData,
+  } = React.useMemo(() => {
+    const {
+      xScale,
+      yScale,
+      isNumericalData,
+      xTicksNormalized,
+      yTicksNormalized,
+      ..._tData
+    } = transformInputData({
       data,
       xKey,
       yKeys,
-      axisOptions,
-      padding,
-      size.width,
-      size.height,
+      axisOptions: axisOptions
+        ? Object.assign({}, CartesianAxisDefaultProps, axisOptions)
+        : undefined,
+      outputWindow: {
+        xMin: valueFromSidedNumber(padding, "left"),
+        xMax: size.width - valueFromSidedNumber(padding, "right"),
+        yMin: valueFromSidedNumber(padding, "top"),
+        yMax: size.height - valueFromSidedNumber(padding, "bottom"),
+      },
       domain,
       domainPadding,
+    });
+    tData.value = _tData;
+
+    const chartBounds = {
+      left: xScale(xScale.domain().at(0) || 0),
+      right: xScale(xScale.domain().at(-1) || 0),
+      top: yScale(yScale.domain().at(0) || 0),
+      bottom: yScale(yScale.domain().at(-1) || 0),
+    };
+
+    return {
+      xTicksNormalized,
+      yTicksNormalized,
       tData,
-    ]);
+      xScale,
+      yScale,
+      chartBounds,
+      isNumericalData,
+      _tData,
+    };
+  }, [
+    data,
+    xKey,
+    yKeys,
+    axisOptions,
+    padding,
+    size.width,
+    size.height,
+    domain,
+    domainPadding,
+    tData,
+  ]);
 
   /**
    * Pan gesture handling
@@ -352,15 +377,19 @@ export function CartesianChart<
                 xScale,
                 yScale,
                 isNumericalData,
+                xTicksNormalized,
+                yTicksNormalized,
                 ix: _tData.ix,
               }}
             />
           ) : null}
         </>
       )}
-      <Group clip={clipRect}>
-        {hasMeasuredLayoutSize && children(renderArg)}
-      </Group>
+      <CartesianChartProvider yScale={yScale} xScale={xScale}>
+        <Group clip={clipRect}>
+          {hasMeasuredLayoutSize && children(renderArg)}
+        </Group>
+      </CartesianChartProvider>
       {hasMeasuredLayoutSize && renderOutside?.(renderArg)}
     </Canvas>
   );
@@ -374,11 +403,3 @@ export function CartesianChart<
     body
   );
 }
-
-CartesianChart.defaultProps = {
-  curve: "linear",
-  chartType: "line",
-  xScaleType: "linear",
-  yScaleType: "linear",
-  renderOutside: () => null,
-};
