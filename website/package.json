@@ -20,7 +20,7 @@
     "autoprefixer": "^10.4.19",
     "clsx": "^2.1.1",
     "formidable-oss-badges": "^1.4.1",
-    "postcss": "^8.4.29",
+    "postcss": "^8.4.31",
     "prism-react-renderer": "^2.3.0",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
