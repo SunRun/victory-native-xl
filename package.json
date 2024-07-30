@@ -2,7 +2,7 @@
   "name": "victory-native-xl-monorepo",
   "private": true,
   "engines": {
-    "node": ">=16.14"
+    "node": ">=18.17"
   },
   "workspaces": [
     "lib",

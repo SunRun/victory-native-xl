@@ -29,6 +29,17 @@ export const ChartRoutes: {
     path: "/bar-with-tooltip",
   },
   {
+    title: "Negative Bar Charts",
+    description:
+      "These charts demonstrate how negative values look with Bar and Bar Group charts.",
+    path: "/negative-bar-charts",
+  },
+  {
+    title: "Bar Charts Custom Bar",
+    description: "These charts demonstrate how to customize individual bars.",
+    path: "/bar-charts-custom-bars",
+  },
+  {
     title: "Scatter Plot",
     description:
       "This is a Scatter plot in Victory Native that supports custom shapes and sizes.",
@@ -51,6 +62,12 @@ export const ChartRoutes: {
     description:
       "This chart shows off ordinal data and touch events. Tap different x axis points to see the highlighted dot move. The color changes based on interpolating the color from the transformed and range data.",
     path: "/ordinal-data",
+  },
+  {
+    title: "Axis Configuration",
+    description:
+      "This shows off the various ways to configure custom axis rendering.",
+    path: "/axis-configuration",
   },
   {
     title: "Custom Shaders",

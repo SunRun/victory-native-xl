@@ -1,4 +1,9 @@
 import { type ScaleLinear } from "d3-scale";
+import {
+  DEFAULT_TICK_COUNT,
+  downsampleTicks,
+  getDomainFromTicks,
+} from "../../utils/tickHelpers";
 import type {
   AxisProps,
   NumericalFields,
@@ -49,8 +54,27 @@ export const transformInputData = <
   xScale: ScaleLinear<number, number>;
   yScale: ScaleLinear<number, number>;
   isNumericalData: boolean;
+  xTicksNormalized: number[];
+  yTicksNormalized: number[];
 } => {
   const data = [..._data];
+  const tickValues = axisOptions?.tickValues;
+  const tickCount = axisOptions?.tickCount ?? DEFAULT_TICK_COUNT;
+
+  const xTickValues =
+    tickValues && typeof tickValues === "object" && "x" in tickValues
+      ? tickValues.x
+      : tickValues;
+  const yTickValues =
+    tickValues && typeof tickValues === "object" && "y" in tickValues
+      ? tickValues.y
+      : tickValues;
+  const xTicks = typeof tickCount === "number" ? tickCount : tickCount.x;
+  const yTicks = typeof tickCount === "number" ? tickCount : tickCount.y;
+
+  const tickDomainsX = getDomainFromTicks(xTickValues);
+  const tickDomainsY = getDomainFromTicks(yTickValues);
+
   const isNumericalData = data.every(
     (datum) => typeof datum[xKey as keyof RawData] === "number",
   );
@@ -64,10 +88,12 @@ export const transformInputData = <
   ) as InputFields<RawData>[XK][];
   const ixNum = ix.map((val, i) => (isNumericalData ? (val as number) : i));
 
-  // Then we find min/max of y values across all yKeys, use that for y range.
-  // (if user provided a domain, use that instead)
+  // If user provides a domain, use that as our min / max
+  // Else if, tickValues are provided, we use that instead
+  // Else, we find min / max of y values across all yKeys, and use that for y range instead.
   const yMin =
     domain?.y?.[0] ??
+    tickDomainsY?.[0] ??
     Math.min(
       ...yKeys.map((key) => {
         return data.reduce((min, curr) => {
@@ -78,6 +104,7 @@ export const transformInputData = <
     );
   const yMax =
     domain?.y?.[1] ??
+    tickDomainsY?.[1] ??
     Math.max(
       ...yKeys.map((key) => {
         return data.reduce((max, curr) => {
@@ -98,7 +125,10 @@ export const transformInputData = <
 
   // Set up our y-scale, notice how domain is "flipped" because
   //  we're moving from cartesian to canvas coordinates
-  const yScaleDomain = [yMax, yMin] as [number, number];
+  // Also, if single data point, manually add upper & lower bounds so chart renders properly
+  const yScaleDomain = (
+    yMax === yMin ? [yMax + 1, yMin - 1] : [yMax, yMin]
+  ) as [number, number];
   const fontHeight = axisOptions?.font?.getSize?.() ?? 0;
   // Our yScaleRange is impacted by our grid options
   const yScaleRange: [number, number] = (() => {
@@ -156,16 +186,28 @@ export const transformInputData = <
     );
   });
 
-  // Measure our top-most y-label if we have grid options so we can
-  //  compensate for it in our x-scale.
-  const topYLabel =
-    axisOptions?.formatYLabel?.(yScale.domain().at(0) as RawData[YK]) ||
-    String(yScale.domain().at(0));
+  // Normalize yTicks values either via the d3 scaleLinear ticks() function or our custom downSample function
+  // Awkward doing this in the transformInputData function but must be done due to x-scale needing this data
+  const yTicksNormalized = yTickValues
+    ? downsampleTicks(yTickValues, yTicks)
+    : yScale.ticks(yTicks);
+  // Calculate all yTicks we're displaying, so we can properly compensate for it in our x-scale
+  const maxYLabel = Math.max(
+    ...yTicksNormalized.map(
+      (yTick) =>
+        axisOptions?.font?.measureText(
+          axisOptions?.formatYLabel?.(yTick as RawData[YK]) || String(yTick),
+        ).width ?? 0,
+    ),
+  );
 
   // Generate our x-scale
-  const ixMin = asNumber(domain?.x?.[0] ?? ixNum.at(0)),
-    ixMax = asNumber(domain?.x?.[1] ?? ixNum.at(-1));
-  const topYLabelWidth = axisOptions?.font?.getTextWidth(topYLabel) ?? 0;
+  // If user provides a domain, use that as our min / max
+  // Else if, tickValues are provided, we use that instead
+  // Else, we find min / max of y values across all yKeys, and use that for y range instead.
+  const ixMin = asNumber(domain?.x?.[0] ?? tickDomainsX?.[0] ?? ixNum.at(0)),
+    ixMax = asNumber(domain?.x?.[1] ?? tickDomainsX?.[1] ?? ixNum.at(-1));
+  const topYLabelWidth = maxYLabel;
   // Determine our x-output range based on yAxis/label options
   const oRange: [number, number] = (() => {
     const yTickCount =
@@ -203,13 +245,21 @@ export const transformInputData = <
   })();
 
   const xScale = makeScale({
-    inputBounds: [ixMin, ixMax],
+    // if single data point, manually add upper & lower bounds so chart renders properly
+    inputBounds: ixMin === ixMax ? [ixMin - 1, ixMax + 1] : [ixMin, ixMax],
     outputBounds: oRange,
     padStart:
       typeof domainPadding === "number" ? domainPadding : domainPadding?.left,
     padEnd:
       typeof domainPadding === "number" ? domainPadding : domainPadding?.right,
   });
+
+  // Normalize xTicks values either via the d3 scaleLinear ticks() function or our custom downSample function
+  // For consistency we do it here, so we have both y and x ticks to pass to the axis generator
+  const xTicksNormalized = xTickValues
+    ? downsampleTicks(xTickValues, xTicks)
+    : xScale.ticks(xTicks);
+
   const ox = ixNum.map((x) => xScale(x)!);
 
   return {
@@ -219,5 +269,7 @@ export const transformInputData = <
     xScale,
     yScale,
     isNumericalData,
+    xTicksNormalized,
+    yTicksNormalized,
   };
 };

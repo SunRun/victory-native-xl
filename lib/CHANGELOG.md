@@ -1,5 +1,63 @@
 # victory-native
 
+## 41.0.2
+
+### Patch Changes
+
+- fix domain padding bottom on bar charts ([#303](https://github.com/FormidableLabs/victory-native-xl/pull/303))
+
+- Add circleSweepDegrees and startAngle props to PieChart ([#307](https://github.com/FormidableLabs/victory-native-xl/pull/307))
+
+## 41.0.1
+
+### Patch Changes
+
+- Fix yLabel width calculation to better align x-scale ([#291](https://github.com/FormidableLabs/victory-native-xl/pull/291))
+
+- Replace getTextWidth with measureText ([#290](https://github.com/FormidableLabs/victory-native-xl/pull/290))
+
+- fix: `useAnimatedPath` no longer jumps when path changes during animation ([#287](https://github.com/FormidableLabs/victory-native-xl/pull/287))
+
+- fix negative bar charts for bar groups ([#295](https://github.com/FormidableLabs/victory-native-xl/pull/295))
+
+## 41.0.0
+
+### Major Changes
+
+- Bump Expo 51, RN 74, Skia 1.0+ ([#259](https://github.com/FormidableLabs/victory-native-xl/pull/259))
+
+### Minor Changes
+
+- Add negative bar value support ([#262](https://github.com/FormidableLabs/victory-native-xl/pull/262))
+
+## 40.2.1
+
+### Patch Changes
+
+- remove defaultProps ([#273](https://github.com/FormidableLabs/victory-native-xl/pull/273))
+
+- Fix pie chart rendering when multiple elements have 0 values ([#266](https://github.com/FormidableLabs/victory-native-xl/pull/266))
+
+## 40.2.0
+
+### Minor Changes
+
+- add tickValues to axisOptions prop ([#255](https://github.com/FormidableLabs/victory-native-xl/pull/255))
+
+- Add `barWidth` and `barCount` prop for `Bar` and `BarGroup` ([#238](https://github.com/FormidableLabs/victory-native-xl/pull/238))
+
+### Patch Changes
+
+- export `PieSliceData` type ([#249](https://github.com/FormidableLabs/victory-native-xl/pull/249))
+
+## 40.1.1
+
+### Patch Changes
+
+- fix: add onEnd callback for cartesian pangesture ([#230](https://github.com/FormidableLabs/victory-native-xl/pull/230))
+
+- resolve single data point dupe keys warning ([#237](https://github.com/FormidableLabs/victory-native-xl/pull/237))
+
 ## 40.1.0
 
 ### Minor Changes
