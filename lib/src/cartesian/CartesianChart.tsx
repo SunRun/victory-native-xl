@@ -386,11 +386,13 @@ export function CartesianChart<
         </>
       )}
       <CartesianChartProvider yScale={yScale} xScale={xScale}>
-        <Group clip={clipRect}>
-          {hasMeasuredLayoutSize && children(renderArg)}
-        </Group>
+        <>
+          <Group clip={clipRect}>
+            {hasMeasuredLayoutSize && children(renderArg)}
+          </Group>
+          {hasMeasuredLayoutSize && renderOutside?.(renderArg)}
+        </>
       </CartesianChartProvider>
-      {hasMeasuredLayoutSize && renderOutside?.(renderArg)}
     </Canvas>
   );
 
