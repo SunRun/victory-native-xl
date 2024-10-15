@@ -1,5 +1,69 @@
 # victory-native
 
+## 41.6.2
+
+### Patch Changes
+
+- Add pie size prop ([#392](https://github.com/FormidableLabs/victory-native-xl/pull/392))
+
+## 41.6.1
+
+### Patch Changes
+
+- Fix stacked bar rounded corners for non-uniform datasets and add support for positive and negative values in the same column. ([#386](https://github.com/FormidableLabs/victory-native-xl/pull/386))
+
+## 41.6.0
+
+### Minor Changes
+
+- Add dashed path effect option for X and Y axes ([#372](https://github.com/FormidableLabs/victory-native-xl/pull/372))
+
+## 41.5.0
+
+### Minor Changes
+
+- Added domain property for multiple y axes ([#375](https://github.com/FormidableLabs/victory-native-xl/pull/375))
+
+### Patch Changes
+
+- Fix frame prop ([#379](https://github.com/FormidableLabs/victory-native-xl/pull/379))
+
+## 41.4.0
+
+### Minor Changes
+
+- Add multiple y-axis support ([#352](https://github.com/FormidableLabs/victory-native-xl/pull/352))
+
+## 41.3.0
+
+### Minor Changes
+
+- Added pie chart labels ([#362](https://github.com/FormidableLabs/victory-native-xl/pull/362))
+
+## 41.2.0
+
+### Minor Changes
+
+- Added labels to bar charts. ([#353](https://github.com/FormidableLabs/victory-native-xl/pull/353))
+
+## 41.1.2
+
+### Patch Changes
+
+- Add Stacked Bars support ([#315](https://github.com/FormidableLabs/victory-native-xl/pull/315))
+
+## 41.1.1
+
+### Patch Changes
+
+- Add curve type `monotoneX` for lines ([#325](https://github.com/FormidableLabs/victory-native-xl/pull/325))
+
+## 41.1.0
+
+### Minor Changes
+
+- Added support for web as a platform ([#330](https://github.com/FormidableLabs/victory-native-xl/pull/330))
+
 ## 41.0.2
 
 ### Patch Changes

@@ -1,6 +1,6 @@
 {
   "name": "@sunrun/victory-native-xl",
-  "version": "40.0.4-0.0.6",
+  "version": "41.6.2-0.0.1",
   "private": false,
   "license": "MIT",
   "repository": {
@@ -8,8 +8,10 @@
     "url": "https://github.com/SunRun/victory-native-xl.git"
   },
   "publishConfig": {
-    "registry": "https://npm.pkg.github.com/SunRun"
+    "registry": "https://npm.pkg.github.com/SunRun",
+    "directory": "lib"
   },
+  "homepage": "https://commerce.nearform.com/open-source/victory-native",
   "react-native": "src/index",
   "types": "dist/index.d.ts",
   "main": "dist/index.js",
