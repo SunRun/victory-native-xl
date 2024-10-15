@@ -11,6 +11,11 @@ export const ChartRoutes: {
     path: "/line-chart",
   },
   {
+    title: "Constant Line Chart",
+    description: "This chart shows off constant lines with scatter points. ",
+    path: "/constant-line-chart",
+  },
+  {
     title: "Bar Chart",
     description:
       "This is a single Bar chart in Victory that supports customized spacing between each bar.",
@@ -31,13 +36,23 @@ export const ChartRoutes: {
   {
     title: "Negative Bar Charts",
     description:
-      "These charts demonstrate how negative values look with Bar and Bar Group charts.",
+      "These charts demonstrate how negative values look with Bar, Bar Group and Stacked Bar charts.",
     path: "/negative-bar-charts",
   },
   {
     title: "Bar Charts Custom Bar",
     description: "These charts demonstrate how to customize individual bars.",
     path: "/bar-charts-custom-bars",
+  },
+  {
+    title: "Stacked Bar Charts (Simple)",
+    description: "This is a Stacked Bar chart in Victory Native.",
+    path: "/stacked-bar-charts",
+  },
+  {
+    title: "Stacked Bar Charts (Complex)",
+    description: "More complicated Stacked Bar charts in Victory Native.",
+    path: "/stacked-bar-charts-complex",
   },
   {
     title: "Scatter Plot",
@@ -64,10 +79,20 @@ export const ChartRoutes: {
     path: "/ordinal-data",
   },
   {
+    title: "Horizontal bands background",
+    description: `Custom horizontal bands background for a chart line, implemented through a custom shader.`,
+    path: "/horizontal-bands-line",
+  },
+  {
     title: "Axis Configuration",
     description:
       "This shows off the various ways to configure custom axis rendering.",
     path: "/axis-configuration",
+  },
+  {
+    title: "Multiple Y Axes",
+    description: "This shows how to use multiple y axes in a single chart",
+    path: "/multiple-y-axes",
   },
   {
     title: "Custom Shaders",
@@ -92,6 +117,11 @@ export const ChartRoutes: {
     description:
       "This is mixture of Pie and Donut charts, showing off the different ways to customize the charts.",
     path: "/pie-and-donut-charts",
+  },
+  {
+    title: "Dashed Axes",
+    description: "This is an Area chart with dashed X and Y axes.",
+    path: "/dashed-axes",
   },
 ];
 
