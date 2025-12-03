@@ -42,9 +42,8 @@ const PolarChartBase = (
   const ctx = usePolarChartContext();
 
   return (
-    <View style={[styles.baseContainer, containerStyle]}>
+    <View style={[styles.baseContainer, containerStyle]} onLayout={onLayout}>
       <Canvas
-        onLayout={onLayout}
         style={StyleSheet.flatten([
           styles.canvasContainer,
           hasMeasuredLayoutSize ? { width, height } : null,

@@ -1,5 +1,11 @@
 # victory-native
 
+## 41.6.3
+
+### Patch Changes
+
+- Wrap Cartesian and Polar canvases in React Native views so Fabric no longer blocks Skia’s internal `onLayout`. This fixes `<Canvas onLayout>` errors on the new architecture without affecting chart rendering.
+
 ## 41.6.2
 
 ### Patch Changes

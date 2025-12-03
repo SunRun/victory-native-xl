@@ -1,5 +1,5 @@
 import * as React from "react";
-import { type LayoutChangeEvent } from "react-native";
+import { StyleSheet, View, type LayoutChangeEvent } from "react-native";
 import { Canvas, Group, rect } from "@shopify/react-native-skia";
 import { useSharedValue } from "react-native-reanimated";
 import {
@@ -464,19 +464,21 @@ export function CartesianChart<
 
   // Body of the chart.
   const body = (
-    <Canvas style={{ flex: 1 }} onLayout={onLayout}>
-      {YAxisComponents}
-      {XAxisComponents}
-      {FrameComponent}
-      <CartesianChartProvider yScale={primaryYScale} xScale={xScale}>
-        <>
-          <Group clip={clipRect}>
-            {hasMeasuredLayoutSize && children(renderArg)}
-          </Group>
-          {hasMeasuredLayoutSize && renderOutside?.(renderArg)}
-        </>
-      </CartesianChartProvider>
-    </Canvas>
+    <View style={styles.canvasContainer} onLayout={onLayout}>
+      <Canvas style={StyleSheet.absoluteFill}>
+        {YAxisComponents}
+        {XAxisComponents}
+        {FrameComponent}
+        <CartesianChartProvider yScale={primaryYScale} xScale={xScale}>
+          <>
+            <Group clip={clipRect}>
+              {hasMeasuredLayoutSize && children(renderArg)}
+            </Group>
+            {hasMeasuredLayoutSize && renderOutside?.(renderArg)}
+          </>
+        </CartesianChartProvider>
+      </Canvas>
+    </View>
   );
 
   // Conditionally wrap the body in gesture handler based on activePressSharedValue
@@ -488,3 +490,7 @@ export function CartesianChart<
     body
   );
 }
+
+const styles = StyleSheet.create({
+  canvasContainer: { flex: 1 },
+});
