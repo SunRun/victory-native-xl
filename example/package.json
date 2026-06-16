@@ -39,7 +39,7 @@
     "react-native-wheel-color-picker": "^1.2.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.24.0",
+    "@babel/core": "^7.29.6",
     "babel-plugin-module-resolver": "^5.0.0",
     "csv-parser": "^3.0.0"
   },
